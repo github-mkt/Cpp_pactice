@@ -1,0 +1,45 @@
+
+using Clock = std::chrono::steady_clock;
+Clock::time_point _startTime{};
+std::unique_ptr<helpers::Measurement> createMetricsMeasurement(Pipeline &pipeline, std::chrono::seconds desiredInterval)
+
+class Measurement
+{
+public:
+    using OnMeasure = std::function<void(const Metrics &metrics)>;
+    using Clock = std::chrono::steady_clock;
+
+    virtual ~Measurement() = default;
+
+    virtual void frameProcessed(std::uint64_t frameSize) = 0;
+ 
+};
+
+ */
+class PeriodicMeasurement final : public Measurement
+{
+public:
+    PeriodicMeasurement(std::chrono::milliseconds desiredInterval, OnMeasure onMeasure);
+
+    const OnMeasure _onMeasure{};
+    const std::chrono::milliseconds _desiredInterval{};
+
+    Clock::time_point _startTime{};
+};
+
+   if (processFrame(info, buffer->pts)) {
+        _metricsLoggingMeasurement->frameProcessed(info.size);
+		
+		
+oid ContinuousMeasurement::frameProcessed(std::uint64_t frameSize)
+{
+
+    _queue.push(FrameInfo{frameSize, _prevTimestamp});
+    _prevTimestamp = Clock::now();
+
+    if (!_queue.isFull()) {
+        return;
+    }
+    
+    _onMeasure(calculateMetrics(totals.first, totals.second));
+}
